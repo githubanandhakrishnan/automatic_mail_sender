@@ -246,8 +246,10 @@ Length: 120-150 words.
                     user_prompt,
                     image_b64
                 )
+                result_json = result_json.replace("```json", "").replace("```", "").replace("json", "").strip()
+                
 
-            result_json = result_json.replace("```json", "").replace("```", "").replace("json", "").strip()
+            
             st.session_state["analysis_result"] = result_json
             st.success("Email generated successfully!")
 
@@ -298,4 +300,5 @@ Length: 120-150 words.
 
 if __name__ == "__main__":
     app()
+
 
