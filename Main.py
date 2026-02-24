@@ -7,9 +7,11 @@ import time
 import smtplib
 import subprocess
 import sys
+import re
 from email.message import EmailMessage
 from git_change import upload_to_github
 from automaticcv_download import download_cv
+
 
 # =========================================================
 # PAGE CONFIG
@@ -19,6 +21,7 @@ st.set_page_config(
     page_icon="📨",
     layout="centered"
 )
+
 
 # =========================================================
 # INSTALL PLAYWRIGHT (Cached)
@@ -31,6 +34,7 @@ def install_playwright():
     )
 
 install_playwright()
+
 
 # =========================================================
 # CONFIGURATION
@@ -45,6 +49,7 @@ API_URL_TEMPLATE = (
     f"{GEMINI_MODEL_NAME}:generateContent?key="
 )
 MAX_RETRIES = 5
+
 
 # =========================================================
 # CLEAN UI STYLING
@@ -71,9 +76,9 @@ st.markdown("""
 .stTextInput>div>div>input, textarea {
     border-radius: 8px;
 }
-
 </style>
 """, unsafe_allow_html=True)
+
 
 # =========================================================
 # HELPER FUNCTIONS
@@ -84,6 +89,7 @@ def file_to_base64(uploaded_file):
     return base64.b64encode(uploaded_file.getvalue()).decode("utf-8")
 
 
+# ================= GEMINI API CALL (FIXED JSON CLEANING) =================
 def call_gemini_api(api_key, prompt, image_data_base64=None):
     if not api_key:
         return {
@@ -114,6 +120,7 @@ def call_gemini_api(api_key, prompt, image_data_base64=None):
                 data=json.dumps(payload)
             )
             response.raise_for_status()
+
             result = response.json()
 
             text_output = (
@@ -123,14 +130,22 @@ def call_gemini_api(api_key, prompt, image_data_base64=None):
                 .get("text", "")
             )
 
-            try:
-                return json.loads(text_output)
-            except json.JSONDecodeError:
-                return {
-                    "MAIL_ID": "",
-                    "SUBJECT_LINE": "",
-                    "EMAIL_CONTENT": text_output
-                }
+            # ================= CLEAN JSON RESPONSE =================
+            cleaned_text = re.sub(r"```json|```", "", text_output).strip()
+
+            json_match = re.search(r"\{.*\}", cleaned_text, re.DOTALL)
+
+            if json_match:
+                try:
+                    return json.loads(json_match.group())
+                except json.JSONDecodeError:
+                    pass
+
+            return {
+                "MAIL_ID": "",
+                "SUBJECT_LINE": "",
+                "EMAIL_CONTENT": cleaned_text
+            }
 
         except requests.exceptions.RequestException:
             if attempt < MAX_RETRIES - 1:
@@ -143,6 +158,7 @@ def call_gemini_api(api_key, prompt, image_data_base64=None):
                 }
 
 
+# ================= EMAIL SENDER =================
 def send_email(sender_email, sender_password, to_email, subject, body):
     msg = EmailMessage()
     msg["From"] = sender_email
@@ -170,14 +186,14 @@ def send_email(sender_email, sender_password, to_email, subject, body):
     except Exception as e:
         return f"❌ Email failed: {str(e)}"
 
+
 # =========================================================
 # MAIN APP
 # =========================================================
 def app():
     st.title("📨 AI-Powered Job Application Mail Sender")
     st.markdown(
-        "Generate and send professional job application emails "
-        "automatically using AI."
+        "Generate and send professional job application emails automatically using AI."
     )
 
     st.divider()
@@ -217,7 +233,7 @@ def app():
     default_prompt = """
 Analyze the uploaded job vacancy image.
 
-Return valid JSON:
+Return ONLY valid JSON:
 {
   "MAIL_ID": "",
   "SUBJECT_LINE": "",
@@ -246,10 +262,7 @@ Length: 120-150 words.
                     user_prompt,
                     image_b64
                 )
-                
-                
 
-            
             st.session_state["analysis_result"] = result_json
             st.success("Email generated successfully!")
 
@@ -258,7 +271,6 @@ Length: 120-150 words.
     # STEP 4 - Review & Send
     if "analysis_result" in st.session_state:
         parsed = st.session_state["analysis_result"]
-        
 
         st.subheader("📋 Step 4: Review & Send")
 
@@ -301,8 +313,3 @@ Length: 120-150 words.
 
 if __name__ == "__main__":
     app()
-
-
-
-
-
