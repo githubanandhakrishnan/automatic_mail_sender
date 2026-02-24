@@ -7,7 +7,7 @@ CV_PATH = "cv.pdf"
 def download_cv():
     with sync_playwright() as p:
         browser = p.chromium.launch(
-            headless=True,
+            headless=False,
             args=["--no-sandbox", "--disable-dev-shm-usage"]
         )
         context = browser.new_context(accept_downloads=True)
@@ -39,5 +39,6 @@ def download_cv():
         download.save_as(CV_PATH)
 
         browser.close()
+
 
     return CV_PATH
