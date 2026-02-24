@@ -40,13 +40,7 @@ if st.button("🔄 Refresh CV"):
         file_path = download_cv()
     st.success("CV Updated Successfully!")
 
-    with open(file_path, "rb") as f:
-        st.download_button(
-            label="📥 Download CV",
-            data=f,
-            file_name="Updated_CV.pdf",
-            mime="application/pdf"
-        )
+
 st.markdown("""
 <style>
     .reportview-container { background: #f0f2f6; }
@@ -263,6 +257,7 @@ About the applicant (for context):
 
 if __name__ == "__main__":
     app()
+
 
 
 
