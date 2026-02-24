@@ -10,7 +10,7 @@ from io import BytesIO
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email import policy
-
+from automaticcv_download import download_cv
 # --- CONFIGURATION ---
 api_key = st.secrets["api_key"]
 sender_email = "anandhakrishnancareer@gmail.com"
@@ -252,6 +252,7 @@ About the applicant (for context):
 
 if __name__ == "__main__":
     app()
+
 
 
 
