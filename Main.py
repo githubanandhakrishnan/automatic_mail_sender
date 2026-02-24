@@ -34,7 +34,7 @@ MAX_RETRIES = 5
 
 
 st.set_page_config(page_title="AI Job Mail Assistant", layout="wide")
-st.title("CV Auto Downloader")
+
 
 
 
@@ -254,6 +254,7 @@ About the applicant (for context):
 
 if __name__ == "__main__":
     app()
+
 
 
 
