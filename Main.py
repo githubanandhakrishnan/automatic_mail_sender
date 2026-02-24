@@ -32,12 +32,7 @@ GEMINI_MODEL_NAME = "gemini-2.5-flash"
 API_URL_TEMPLATE = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL_NAME}:generateContent?key="
 MAX_RETRIES = 5
 
-# --- Streamlit Setup ---
-if st.button("🔄 Refresh CV"):
-    with st.spinner("Generating latest CV..."):
-        file_path = download_cv()
-        upload_to_github(file_path,file_path)
-    st.success("CV Updated Successfully!")
+
 st.set_page_config(page_title="AI Job Mail Assistant", layout="wide")
 st.title("CV Auto Downloader")
 
@@ -173,16 +168,15 @@ def send_email(sender_email, sender_password, to_email, subject, body):
 # --- Streamlit App ---
 def app():
     st.title("📨 AI-Powered Job Mail Sender (JSON Enhanced)")
+    # --- Streamlit Setup ---
+
+    if st.button("🔄 Refresh CV"):
+        with st.spinner("Generating latest CV..."):
+            file_path = download_cv()
+            upload_to_github(file_path,file_path)
+        st.success("CV Updated Successfully!")
     st.markdown("Upload a job vacancy image → AI extracts structured email details → Send automatically.")
 
-    # --- CV UPLOAD (ONLY NEW FEATURE ADDED) ---
-    st.subheader("📄 Upload/Update Your CV")
-    cv_file = st.file_uploader("Upload CV (PDF only)", type=["pdf"])
-    if cv_file:
-        cv_save_path = os.path.join(os.getcwd(), "CV_AnandhaKrishnanS.pdf")
-        with open(cv_save_path, "wb") as f:
-            f.write(cv_file.getvalue())
-        st.success("✅ CV updated successfully! This file will be used for all future emails.")
 
     col1, col2 = st.columns(2)
 
@@ -260,6 +254,7 @@ About the applicant (for context):
 
 if __name__ == "__main__":
     app()
+
 
 
 
