@@ -22,7 +22,20 @@ MAX_RETRIES = 5
 
 # --- Streamlit Setup ---
 st.set_page_config(page_title="AI Job Mail Assistant", layout="wide")
+st.title("CV Auto Downloader")
 
+if st.button("🔄 Refresh CV"):
+    with st.spinner("Generating latest CV..."):
+        file_path = download_cv()
+    st.success("CV Updated Successfully!")
+
+    with open(file_path, "rb") as f:
+        st.download_button(
+            label="📥 Download CV",
+            data=f,
+            file_name="Updated_CV.pdf",
+            mime="application/pdf"
+        )
 st.markdown("""
 <style>
     .reportview-container { background: #f0f2f6; }
@@ -123,7 +136,7 @@ def send_email(sender_email, sender_password, to_email, subject, body):
     msg.set_content(body, subtype="plain", charset="utf-8")
 
     # --- Attach CV PDF ---
-    cv_path = os.path.join(os.getcwd(), "ANANDHA-KRISHNAN-S_Resume.pdf")
+    cv_path = os.path.join(os.getcwd(), "cv.pdf")
     if os.path.exists(cv_path):
         try:
             with open(cv_path, "rb") as f:
