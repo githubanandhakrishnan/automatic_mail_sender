@@ -1,1 +1,1 @@
-# automatic_mail_sender
+# JobmailSender
