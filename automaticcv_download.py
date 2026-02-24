@@ -5,7 +5,7 @@ CV_PATH = "cv.pdf"
 
 def download_cv():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)  # ✅ headless mode enabled
+        browser = p.chromium.launch(headless=True)  # ✅ headless mode enabled
         context = browser.new_context(accept_downloads=True)
         page = context.new_page()
 
@@ -38,4 +38,5 @@ def download_cv():
 
 
 download_cv()
+
 
