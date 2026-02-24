@@ -35,10 +35,7 @@ MAX_RETRIES = 5
 st.set_page_config(page_title="AI Job Mail Assistant", layout="wide")
 st.title("CV Auto Downloader")
 
-if st.button("🔄 Refresh CV"):
-    with st.spinner("Generating latest CV..."):
-        file_path = download_cv()
-    st.success("CV Updated Successfully!")
+
 
 
 st.markdown("""
@@ -257,6 +254,7 @@ About the applicant (for context):
 
 if __name__ == "__main__":
     app()
+
 
 
 
