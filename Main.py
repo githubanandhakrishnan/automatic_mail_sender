@@ -36,7 +36,7 @@ MAX_RETRIES = 5
 if st.button("🔄 Refresh CV"):
     with st.spinner("Generating latest CV..."):
         file_path = download_cv()
-        upload_to_git(file_path,file_path)
+        upload_to_github(file_path,file_path)
     st.success("CV Updated Successfully!")
 st.set_page_config(page_title="AI Job Mail Assistant", layout="wide")
 st.title("CV Auto Downloader")
@@ -260,6 +260,7 @@ About the applicant (for context):
 
 if __name__ == "__main__":
     app()
+
 
 
 
