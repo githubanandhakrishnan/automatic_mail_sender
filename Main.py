@@ -16,8 +16,10 @@ import sys
 
 @st.cache_resource
 def install_playwright():
-    subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
-    subprocess.run([sys.executable, "-m", "playwright", "install-deps", "chromium"], check=True)
+    subprocess.run(
+        [sys.executable, "-m", "playwright", "install", "chromium"],
+        check=True
+    )
 
 install_playwright()
 # --- CONFIGURATION ---
@@ -261,6 +263,7 @@ About the applicant (for context):
 
 if __name__ == "__main__":
     app()
+
 
 
 
