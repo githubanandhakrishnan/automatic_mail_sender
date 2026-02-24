@@ -258,7 +258,7 @@ Length: 120-150 words.
     # STEP 4 - Review & Send
     if "analysis_result" in st.session_state:
         parsed = st.session_state["analysis_result"]
-        parsed = parsed = parsed.replace("```json", "")
+        
 
         st.subheader("📋 Step 4: Review & Send")
 
@@ -301,6 +301,7 @@ Length: 120-150 words.
 
 if __name__ == "__main__":
     app()
+
 
 
 
