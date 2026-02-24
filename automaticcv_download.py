@@ -1,11 +1,11 @@
 from playwright.sync_api import sync_playwright
 import time
-
+import os
 CV_PATH = "cv.pdf"
 
 def download_cv():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)  # ✅ headless mode enabled
+        browser = p.chromium.launch(headless=False)  # ✅ headless mode enabled
         context = browser.new_context(accept_downloads=True)
         page = context.new_page()
 
@@ -29,14 +29,14 @@ def download_cv():
 
         download = download_info.value
         download.save_as("cv.pdf")
+        # Delete old CV if exists
+        if os.path.exists(CV_PATH):
+            os.remove(CV_PATH)
 
         browser.close()
 
         print("CV downloaded successfully!")
 
         browser.close()
-
-
-download_cv()
-
+    return CV_PATH
 
