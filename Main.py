@@ -11,6 +11,15 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email import policy
 from automaticcv_download import download_cv
+import subprocess
+import sys
+
+@st.cache_resource
+def install_playwright():
+    subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
+    subprocess.run([sys.executable, "-m", "playwright", "install-deps", "chromium"], check=True)
+
+install_playwright()
 # --- CONFIGURATION ---
 api_key = st.secrets["api_key"]
 sender_email = "anandhakrishnancareer@gmail.com"
@@ -252,6 +261,7 @@ About the applicant (for context):
 
 if __name__ == "__main__":
     app()
+
 
 
 
