@@ -1,4 +1,6 @@
 import streamlit as st
+import subprocess
+import sys
 @st.cache_resource
 def install_playwright():
     subprocess.run(
@@ -21,8 +23,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email import policy
 from automaticcv_download import download_cv
-import subprocess
-import sys
+
 
 
 # --- CONFIGURATION ---
@@ -256,6 +257,7 @@ About the applicant (for context):
 
 if __name__ == "__main__":
     app()
+
 
 
 
