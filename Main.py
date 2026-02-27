@@ -1,3 +1,4 @@
+import streamlit as st
 @st.cache_resource
 def install_playwright():
     subprocess.run(
@@ -6,7 +7,7 @@ def install_playwright():
     )
 
 install_playwright()
-import streamlit as st
+
 import requests
 import base64
 import json
@@ -255,6 +256,7 @@ About the applicant (for context):
 
 if __name__ == "__main__":
     app()
+
 
 
 
